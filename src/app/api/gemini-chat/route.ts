@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     }
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: {
@@ -34,8 +34,13 @@ export async function POST(req: Request) {
     );
 
     const data = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini";
-
+    console.log("Gemini raw response:", JSON.stringify(data, null, 2));
+    let reply = "Gemini could not generate a response. Please rephrase your question.";
+    if (data?.candidates?.length > 0 && data.candidates[0]?.content?.parts?.length > 0) {
+      reply = data.candidates[0].content.parts[0].text;
+    } else if (data?.error) {
+      reply = `Gemini API error: ${data.error.message || JSON.stringify(data.error)}`;
+    }
     return NextResponse.json({ reply }, { status: 200 });
   } catch (err) {
     console.error("Gemini API error:", err);

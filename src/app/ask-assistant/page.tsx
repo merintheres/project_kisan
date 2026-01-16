@@ -76,7 +76,7 @@ export default function UnifiedVoiceChat() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const chatEndRef = useRef<HTMLDivElement>(null)
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""
+  // Remove direct use of Gemini API key in client
 
   useEffect(() => {
     const loadVoices = () => {
@@ -122,21 +122,14 @@ export default function UnifiedVoiceChat() {
     if (!question.trim()) return
     setIsLoading(true)
     appendMessage("You", question)
-    const userPrompt = {
-      role: "user",
-      parts: [{ text: question }]
-    }
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [userPrompt] })
-        }
-      )
+      const res = await fetch("/api/gemini-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: question })
+      })
       const data = await res.json()
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response."
+      const reply = data?.reply || "No response from Gemini"
       appendMessage("Gemini", reply)
     } catch {
       appendMessage("Gemini", "Error fetching response.")
