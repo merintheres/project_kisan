@@ -98,7 +98,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Quick Actions with Gemini Assistant */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-5 gap-6 mb-8">
           <Link href="/crop-diagnosis">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-green-200">
               <CardHeader className="text-center">
@@ -108,6 +108,21 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <Button className="w-full bg-green-600 hover:bg-green-700">Take Photo & Diagnose</Button>
+              </CardContent>
+            </Card>
+
+          </Link>
+
+          {/* Crop Identification Feature */}
+          <Link href="/crop-identification">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-emerald-200">
+              <CardHeader className="text-center">
+                <Camera className="w-16 h-16 text-emerald-600 mx-auto mb-4" />
+                <CardTitle className="text-emerald-800">Crop Identification</CardTitle>
+                <CardDescription>Identify crops from photos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700">Identify Crop</Button>
               </CardContent>
             </Card>
           </Link>
